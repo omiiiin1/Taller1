@@ -4,19 +4,20 @@
 
 class Alumno {
     private: 
-    string id;
-    string nombre;
-    string apellido;
-    string carrera;
-    string fechaIngreso;
+    std::string id;
+    std::string nombre;
+    std::string apellido;
+    std::string carrera;
+    std::string fechaIngreso;
 
     public:
-        Alumno(string, string, string, string, string);
-        string getId();
-        string getNombre();
-        string getApellido();
-        string getCarrera();
-        string getFechaIngreso();
+        Alumno(std::string id, std::string nombre, std::string apellido, 
+               std::string carrera, std::string fechaIngreso);
+        std::string getId();
+        std::string getNombre();
+        std::string getApellido();
+        std::string getCarrera();
+        std::string getFechaIngreso();
         void setId(string);
         void setNombre(string);
         void setApellido(string);
