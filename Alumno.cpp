@@ -1,5 +1,6 @@
 #include "Alumno.h"
 #include <iostream>
+using namespace std;
 
 Alumno::Alumno(string id, string nombre, string apellido, string carrera, string fechaIngreso){
     this -> id = id;
@@ -20,9 +21,9 @@ void Alumno::setApellido(string apellido){this -> apellido = apellido;}
 void Alumno::setCarrera(string carrera){this -> carrera = carrera;}
 void Alumno::setFechaIngreso(string fechaIngreso){this -> fechaIngreso = fechaIngreso;}
 void Alumno::toString(){
-    std::cout << "ID: " << id << std::endl;
-    std::cout << "Nombre: " << nombre << " " << apellido << std::endl;
-    std::cout << "Carrera: " << carrera << std::endl;
-    std::cout << "Fecha de ingreso: " << fechaIngreso << std::endl;
+    cout << "ID: " << id << endl;
+    cout << "Nombre: " << nombre << " " << apellido << endl;
+    cout << "Carrera: " << carrera << endl;
+    cout << "Fecha de ingreso: " << fechaIngreso << endl;
 }
 
