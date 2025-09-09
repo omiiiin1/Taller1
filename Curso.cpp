@@ -29,3 +29,4 @@ void Curso::toString(){
     cout << "Capacidad: " << capacidad << endl;
     cout << "Carrera: " << carrera << endl;
     cout << "Profesor: " << profesor << endl;
+}
