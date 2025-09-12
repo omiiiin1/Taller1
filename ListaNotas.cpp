@@ -43,6 +43,19 @@ float ListaNotas::calcularPromedio(){
     return suma / cantidad;
 }
 
+int ListaNotas::getCantidad(){
+    return cantidad;
+}
+
 bool ListaNotas::notaValida(float calificacion){
     return (calificacion >= 1.0f && calificacion <= 7.0f);
 }
+ListaNotas::mostrarNotas(){
+    Nota* actual = cabeza;
+    while(actual != nullptr){
+        std::cout << actual -> calificacion << " ";
+        actual = actual -> siguiente;
+    }
+    std::cout << std::endl;
+}
+

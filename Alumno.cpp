@@ -27,3 +27,5 @@ void Alumno::toString(){
     cout << "Fecha de ingreso: " << fechaIngreso << endl;
 }
 
+~Alumno(){};
+
