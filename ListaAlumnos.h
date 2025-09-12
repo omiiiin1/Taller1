@@ -15,7 +15,7 @@ class ListaAlumnos{
         void eliminarAlumno(Alumno*);
         
         NodoAlumno* buscarAlumnoId(std::string);
-        void mostrarPorNombre(std::string); 
+        NodoAlumno* mostrarPorNombre(std::string); 
         int getCantidad();
         void mostrarAlumnos();
 

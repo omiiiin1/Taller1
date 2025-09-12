@@ -17,20 +17,15 @@ ListaNotas::~ListaNotas(){
 }
 
 void ListaNotas::agregarNota(float calificacion){
-    if(notaValida(calificacion)){
-        Nota* nuevaNota = new Nota(calificacion);
-        if(cabeza == nullptr){
-            cabeza = nuevaNota;
-            cola = nuevaNota;
-        } else {
-            cola -> siguiente = nuevaNota;
-            cola = nuevaNota;
-        }
-        cantidad++;
+    Nota* nuevoNodo = new Nota(calificacion);
+    if(cabeza == nullptr){
+        cabeza = nuevoNodo;
+        cola = nuevoNodo;
     } else {
-        std::cout << "Nota fuera de rango. Debe estar entre 1.0 y 7.0" << std::endl;
-        return;
+        cola -> siguiente = nuevoNodo;
+        cola = nuevoNodo;
     }
+    cantidad++;
 }
 
 float ListaNotas::calcularPromedio(){
@@ -48,9 +43,7 @@ int ListaNotas::getCantidad(){
     return cantidad;
 }
 
-bool ListaNotas::notaValida(float calificacion){
-    return (calificacion >= 1.0f && calificacion <= 7.0f);
-}
+
 void ListaNotas::mostrarNotas(){
     Nota* actual = cabeza;
     while(actual != nullptr){

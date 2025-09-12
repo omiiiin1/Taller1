@@ -7,10 +7,7 @@ Inscripcion::Inscripcion(Alumno& alumno, Curso& curso) : alumno(alumno), curso(c
 }
 
 void Inscripcion::agregarNota(float calificacion){
-    if(calificacion < 1.0f || calificacion > 7.0f){
-        std::cout << "Nota fuera de rango. Debe estar entre 1.0 y 7.0" << std::endl;
-        return;
-    }
+    
     notas.agregarNota(calificacion);
 }
 

@@ -14,7 +14,7 @@ class ListaCursos{
         void eliminarCurso(std::string);
         
         NodoCurso* buscarCurso(std::string);
-        void mostrarPorNombre(std::string);
+        NodoCurso* mostrarPorNombre(std::string);
 
         int getCantidad();
         void mostrarCurso(NodoCurso*);

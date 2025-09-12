@@ -12,7 +12,7 @@ class ListaNotas{
         float calcularPromedio();
         int getCantidad();
         void mostrarNotas();
-        bool notaValida(float); 
+     
 
         ~ListaNotas();
         

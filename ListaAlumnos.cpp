@@ -70,15 +70,15 @@ int ListaAlumnos::getCantidad(){
     return cantidad;
 }
 
-void ListaAlumnos::mostrarPorNombre(std::string nombre){
+NodoAlumno* ListaAlumnos::mostrarPorNombre(std::string nombre){
     NodoAlumno* actual = cabeza;
     while(actual != nullptr){
         if(actual -> alumno.getNombre() == nombre){
-            actual -> alumno.toString();
-            std::cout << "------------------------" << std::endl;
+            return actual;
         }
         actual = actual -> siguiente;
     }
+    return nullptr;
 }
 
 void ListaAlumnos::mostrarAlumnos(){

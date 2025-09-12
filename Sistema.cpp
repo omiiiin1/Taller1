@@ -26,7 +26,27 @@ void Sistema::buscarAlumno(std::string id){
         std::cout << "Alumno con ID " << id << " no encontrado." << std::endl;
     }
 }
-    
+
+void Sistema::buscarAlumnoNombre(std::string nombre){
+    NodoAlumno* actual = alumnos->getCabeza();
+    bool encontrado = false;
+        std::string nombreBuscado = nombre;
+        std::transform(nombreBuscado.begin(), nombreBuscado.end(), nombreBuscado.begin(), ::tolower);
+        while(actual != nullptr){
+            std::string nombreAlumno = actual->alumno.getNombre();
+            std::transform(nombreAlumno.begin(), nombreAlumno.end(), nombreAlumno.begin(), ::tolower);
+            if(nombreAlumno == nombreBuscado){
+                actual->alumno.toString();
+                std::cout << "------------------------" << std::endl;
+                encontrado = true;
+            }
+            actual = actual->siguiente;
+        }
+        if(!encontrado){
+            std::cout << "No se encontraron alumnos con el nombre " << nombre << "." << std::endl;
+        }
+}
+
 void Sistema::eliminarAlumno(std::string id){
     if(alumnos -> buscarAlumnoId(id) == nullptr){
         std::cout << "El alumno con ID " << id << " no está registrado." << std::endl;
@@ -69,6 +89,25 @@ void Sistema::buscarCurso(std::string codigo){
         std::cout << "Curso con código " << codigo << " no encontrado." << std::endl;
     }
 }
+void Sistema::buscarCursoNombre(std::string nombre){
+    NodoCurso* actual = cursos->getCabeza();
+    bool encontrado = false;
+        std::string nombreBuscado = nombre;
+        std::transform(nombreBuscado.begin(), nombreBuscado.end(), nombreBuscado.begin(), ::tolower);
+        while(actual != nullptr){
+            std::string nombreCurso = actual->curso.getNombre();
+            std::transform(nombreCurso.begin(), nombreCurso.end(), nombreCurso.begin(), ::tolower);
+            if(nombreCurso == nombreBuscado){
+                actual->curso.toString();
+                std::cout << "------------------------" << std::endl;
+                encontrado = true;
+            }
+            actual = actual->siguiente;
+        }
+        if(!encontrado){
+            std::cout << "No se encontraron cursos con el nombre " << nombre << "." << std::endl;
+        }
+}
 
 void Sistema::eliminarCurso(std::string codigo){
     if(cursos -> buscarCurso(codigo) == nullptr){
@@ -99,7 +138,13 @@ void Sistema::inscribirAlumno(std::string idAlumno, std::string codigoCurso) {
         return;
     }
     
-    if (alumno->alumno.getCarrera() != curso->curso.getCarrera()) {
+    
+    std::string carreraAlumno = alumno->alumno.getCarrera();
+    std::string carreraCurso = curso->curso.getCarrera();
+    
+    std::transform(carreraAlumno.begin(), carreraAlumno.end(), carreraAlumno.begin(), ::tolower);
+    std::transform(carreraCurso.begin(), carreraCurso.end(), carreraCurso.begin(), ::tolower);
+    if (carreraAlumno != carreraCurso) {
         std::cout << "Error: El alumno y el curso deben ser de la misma carrera." << std::endl;
         return;
     }

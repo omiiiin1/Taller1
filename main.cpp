@@ -1,6 +1,8 @@
 #include <iostream>
 #include "Sistema.h"
 #include <string>
+#include <regex>
+
 
 using namespace std;
 
@@ -9,6 +11,9 @@ void mostrarMenuAlumnos();
 void mostrarMenuCursos();
 void mostrarMenuInscripciones();
 void mostrarMenuReportes();
+
+bool verificarFechaIngreso(std::string fecha);
+
 
 int main() {
     Sistema sistema;
@@ -42,20 +47,37 @@ int main() {
                             getline(cin, apellido);
                             cout << "Ingrese Carrera: ";
                             getline(cin, carrera);
-                            cout << "Ingrese Fecha de Ingreso: ";
-                            getline(cin, fechaIngreso);
+                            do {
+                                cout << "Ingrese Fecha de Ingreso (DD/MM/AAAA): ";
+                                getline(cin, fechaIngreso);
+                                if (!verificarFechaIngreso(fechaIngreso)) {
+                                    cout << "Fecha inválida. Formato esperado: DD/MM/AAAA" << endl;
+                                }
+                            } while (!verificarFechaIngreso(fechaIngreso));
                             sistema.registrarAlumno(id, nombre, apellido, carrera, fechaIngreso);
                             break;
-                        case 2:
-                            cout << "Ingrese ID del alumno a buscar: ";
-                            getline(cin, id);
-                            sistema.buscarAlumno(id);
+                        
+                        case 2: {
+                            int tipoBusqueda;
+                            cout << "¿Cómo desea buscar al alumno?" << endl;
+                            cout << "1. Por ID" << endl;
+                            cout << "2. Por nombre" << endl;
+                            cout << "Seleccione una opción: ";
+                            cin >> tipoBusqueda;
+                            cin.ignore();
+                            if (tipoBusqueda == 1) {
+                                cout << "Ingrese ID del alumno a buscar: ";
+                                getline(cin, id);
+                                sistema.buscarAlumno(id);
+                            } else if (tipoBusqueda == 2) {
+                                cout << "Ingrese nombre del alumno a buscar: ";
+                                getline(cin, nombre);
+                                sistema.buscarAlumnoNombre(nombre); 
+                            } else {
+                                cout << "Opción inválida." << endl;
+                            }
                             break;
-                        case 3:
-                            cout << "Ingrese ID del alumno a eliminar: ";
-                            getline(cin, id);
-                            sistema.eliminarAlumno(id);
-                            break;
+                        }
                         case 0:
                             break;
                         default:
@@ -78,8 +100,20 @@ int main() {
                             getline(cin, codigoCurso);
                             cout << "Ingrese Nombre del curso: ";
                             getline(cin, nombre);
-                            cout << "Ingrese Capacidad del curso: ";
-                            cin >> capacidad;
+                            while (true) {
+                                cout << "Ingrese Capacidad del curso: ";
+                                if (cin >> capacidad) {
+                                    if (capacidad > 0) {
+                                        break;
+                                    } else {
+                                        cout << "La capacidad debe ser un número entero positivo." << endl;
+                                    }
+                                } else {
+                                    cout << "Entrada inválida. Debe ingresar un número entero." << endl;
+                                    cin.clear();
+                                }
+                                while (cin.get() != '\n');
+                            }
                             cin.ignore();
                             cout << "Ingrese Carrera del curso: ";
                             getline(cin, carrera);
@@ -87,11 +121,27 @@ int main() {
                             getline(cin, profesor);
                             sistema.registrarCurso(codigoCurso, nombre, capacidad, carrera, profesor);
                             break;
-                        case 2:
-                            cout << "Ingrese Código del curso: ";
-                            getline(cin, codigoCurso);
-                            sistema.buscarCurso(codigoCurso);
+                        case 2: {
+                            int tipoBusqueda;
+                            cout << "¿Cómo desea buscar el curso?" << endl;
+                            cout << "1. Por código" << endl;
+                            cout << "2. Por nombre" << endl;
+                            cout << "Seleccione una opción: ";
+                            cin >> tipoBusqueda;
+                            cin.ignore();
+                            if (tipoBusqueda == 1) {
+                                cout << "Ingrese Código del curso: ";
+                                getline(cin, codigoCurso);
+                                sistema.buscarCurso(codigoCurso);
+                            } else if (tipoBusqueda == 2) {
+                                cout << "Ingrese nombre del curso a buscar: ";
+                                getline(cin, nombre);
+                                sistema.buscarCursoNombre(nombre);
+                            } else {
+                                cout << "Opción inválida." << endl;
+                            }
                             break;
+                        }
                         case 3:
                             cout << "Ingrese Código del curso a eliminar: ";
                             getline(cin, codigoCurso);
@@ -129,16 +179,31 @@ int main() {
                             getline(cin, codigoCurso);
                             sistema.eliminarInscripcion(codigoAlumno, codigoCurso);
                             break;
-                        case 3:
+                        case 3:{
+                            string codigoAlumno, codigoCurso;
+                            float calificacion;
                             cout << "Ingrese ID del alumno: ";
                             getline(cin, codigoAlumno);
                             cout << "Ingrese Código del curso: ";
                             getline(cin, codigoCurso);
-                            cout << "Ingrese la calificación (1.0 - 7.0): ";
-                            cin >> calificacion;
-                            cin.ignore();
+                            while(true){
+                                cout << "Ingrese la calificación(1.0 - 7.0): ";
+                                if(cin >> calificacion){
+                                    if(calificacion >= 1.0f && calificacion <= 7.0f){
+                                        break;
+                                    } else {
+                                        cout << "Calificación fuera de rango" << endl;
+                                    }
+                                } else {
+                                    cout << "Entrada inválida. Debe ingresar un número decimal." << endl;
+                                    cin.clear();
+                                }
+                                while (cin.get() != '\n');
+                            }
                             sistema.agregarNota(codigoAlumno, codigoCurso, calificacion);
                             break;
+                        }
+                            
                         case 4:
                             cout << "Ingrese ID del alumno: ";
                             getline(cin, codigoAlumno);
@@ -261,4 +326,33 @@ void mostrarMenuReportes() {
     cout << "6. Promedio general alumno" << endl;
     cout << "0. Volver al menu principal" << endl;
     cout << "----------------" << endl;
+}
+
+bool verificarFechaIngreso(std::string fecha) {
+    std::regex patron(R"((\d{2})/(\d{2})/(\d{4}))");
+    if (!std::regex_match(fecha, patron)) {
+        return false;
+    }
+
+    int dia = stoi(fecha.substr(0, 2));
+    int mes = stoi(fecha.substr(3, 2));
+    int anio = stoi(fecha.substr(6, 4));
+
+    if (mes < 1 || mes > 12) return false;
+
+    int diasEnMes;
+    switch (mes) {
+        case 1: case 3: case 5: case 7: case 8: case 10: case 12:
+            diasEnMes = 31; break;
+        case 4: case 6: case 9: case 11:
+            diasEnMes = 30; break;
+        case 2:
+            diasEnMes = (anio % 4 == 0 && (anio % 100 != 0 || anio % 400 == 0)) ? 29 : 28; break;
+        default:
+            return false;
+    }
+
+    if(anio < 1900 || anio > 2100) return false;
+
+    return dia >= 1 && dia <= diasEnMes;
 }

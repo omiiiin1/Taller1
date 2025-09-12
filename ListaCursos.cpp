@@ -61,15 +61,15 @@ NodoCurso* ListaCursos::buscarCurso(std::string codigo){
     }
     return nullptr;
 }
-void ListaCursos::mostrarPorNombre(std::string nombre){
+NodoCurso* ListaCursos::mostrarPorNombre(std::string nombre){
     NodoCurso* actual = cabeza;
     while(actual != nullptr){
         if(actual -> curso.getNombre() == nombre){
-            actual -> curso.toString();
-            std::cout << "------------------------" << std::endl;
+            return actual;
         }
         actual = actual -> siguiente;
     }
+    return nullptr;
 }
 
 int ListaCursos::getCantidad(){

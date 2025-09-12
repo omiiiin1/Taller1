@@ -11,10 +11,12 @@ class Sistema{
         Sistema();
         void registrarAlumno(std::string, std::string, std::string, std::string, std::string);
         void buscarAlumno(std::string);
+        void buscarAlumnoNombre(std::string);
         void eliminarAlumno(std::string);
         
         void registrarCurso(std::string codigo, std::string nombre, int capacidad, std::string carrera, std::string profesor);
         void buscarCurso(std::string);
+        void buscarCursoNombre(std::string);
         void eliminarCurso(std::string);
 
         void inscribirAlumno(std::string, std::string);
