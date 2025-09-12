@@ -14,6 +14,6 @@ class ListaNotas{
         void mostrarNotas();
         bool notaValida(float); 
 
-        ~ListaNotas(){};
+        ~ListaNotas();
         
 };

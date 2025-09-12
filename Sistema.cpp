@@ -1,5 +1,6 @@
 #include "Sistema.h"
 #include <iostream>
+#include <string>
 
 Sistema::Sistema(){
     alumnos = new ListaAlumnos();
@@ -7,18 +8,18 @@ Sistema::Sistema(){
     inscripciones = new ListaInscripciones();
 }
 
-void Sistema::registrarAlumno(std::string rut, std::string nombre, std::string apellido, std::string carrera, std::string email){
-    if(alumnos -> buscarAlumno(rut) != nullptr){
-        std::cout << "El alumno con RUT " << rut << " ya está registrado." << std::endl;
+void Sistema::registrarAlumno(std::string id, std::string nombre, std::string apellido, std::string carrera, std::string email){
+    if(alumnos -> buscarAlumnoId(id) != nullptr){
+        std::cout << "El alumno con ID " << id << " ya está registrado." << std::endl;
         return;
     }
-    Alumno* nuevoAlumno = new Alumno(rut, nombre, apellido, carrera, email);
+    Alumno* nuevoAlumno = new Alumno(id, nombre, apellido, carrera, email);
     alumnos -> agregarAlumno(nuevoAlumno);
     std::cout << "Alumno registrado exitosamente." << std::endl;
 }
 
 void Sistema::buscarAlumno(std::string id){
-    NodoAlumno* nodo = alumnos -> buscarAlumno(id);
+    NodoAlumno* nodo = alumnos -> buscarAlumnoId(id);
     if(nodo != nullptr){
         nodo -> alumno.toString();
     } else {
@@ -27,21 +28,26 @@ void Sistema::buscarAlumno(std::string id){
 }
     
 void Sistema::eliminarAlumno(std::string id){
-    if(alumnos -> buscarAlumno(id) == nullptr){
+    if(alumnos -> buscarAlumnoId(id) == nullptr){
         std::cout << "El alumno con ID " << id << " no está registrado." << std::endl;
         return;
     }
     // Eliminar inscripciones asociadas al alumno
     NodoInscripcion* actual = inscripciones -> getCabeza();
     while(actual != nullptr){
-        if(actual -> inscripcion.getAlumno() -> getId() == rut){
+        if(actual -> inscripcion.getAlumno() -> getId() == id){
             inscripciones -> eliminarInscripcion(actual -> inscripcion);
             actual = inscripciones -> getCabeza(); // Reiniciar desde el inicio
         } else {
             actual = actual -> siguiente;
         }
     }
-    alumnos -> eliminarAlumno(id);
+    
+    // Buscar el alumno para eliminarlo
+    NodoAlumno* alumnoAEliminar = alumnos -> buscarAlumnoId(id);
+    if(alumnoAEliminar != nullptr){
+        alumnos -> eliminarAlumno(&(alumnoAEliminar -> alumno));
+    }
     std::cout << "Alumno eliminado exitosamente." << std::endl;
 }
 
@@ -74,47 +80,49 @@ void Sistema::eliminarCurso(std::string codigo){
     while(actual != nullptr){
         if(actual -> inscripcion.getCurso() -> getCodigo() == codigo){
             inscripciones -> eliminarInscripcion(actual -> inscripcion);
-            actual = inscripciones -> getCabeza(); // Reiniciar desde el inicio
+            actual = inscripciones -> getCabeza(); 
         } else {
             actual = actual -> siguiente;
         }
     }
+    
     cursos -> eliminarCurso(codigo);
     std::cout << "Curso eliminado exitosamente." << std::endl;
 }
 
 void Sistema::inscribirAlumno(std::string idAlumno, std::string codigoCurso) {
-    NodoAlumno* alumno = alumnos.buscarPorId(idAlumno);
-    NodoCurso* curso = cursos.buscarPorCodigo(codigoCurso);
+    NodoAlumno* alumno = alumnos->buscarAlumnoId(idAlumno);
+    NodoCurso* curso = cursos->buscarCurso(codigoCurso);
     
     if (alumno == nullptr || curso == nullptr) {
         std::cout << "Error: Alumno o curso no encontrado." << std::endl;
         return;
     }
     
-    if (alumno->dato.getCarrera() != curso->dato.getCarrera()) {
+    if (alumno->alumno.getCarrera() != curso->curso.getCarrera()) {
         std::cout << "Error: El alumno y el curso deben ser de la misma carrera." << std::endl;
         return;
     }
 
-    NodoInscripcion* existente = inscripciones.buscarInscripcion(idAlumno, codigoCurso);
+    NodoInscripcion* existente = inscripciones->buscarInscripcion(idAlumno, codigoCurso);
     if (existente != nullptr) {
         std::cout << "Error: El alumno ya está inscrito en este curso." << std::endl;
         return;
     }
 
-    int cantidadInscripciones = inscripciones.contarInscripciones(codigoCurso);
-    if (cantidadInscripciones >= curso->dato.getCapacidad()) {
+    int cantidadInscripciones = inscripciones->contarInscripciones(codigoCurso);
+    if (cantidadInscripciones >= curso->curso.getCapacidad()) {
         std::cout << "Error: El curso ha alcanzado su capacidad máxima." << std::endl;
         return;
     }
 
-
-    Inscripcion nuevaInscripcion(&(alumno->dato), &(curso->dato));
-    inscripciones.insertarAlFinal(nuevaInscripcion);
-    std::cout << "Alumno inscrito exitosamente." << std::endl;
-    std::cout << "Cupos disponibles: " << (curso->dato.getCapacidad() - (cantidadInscripciones + 1)) << std::endl;
     
+    Inscripcion nuevaInscripcion(&(alumno->alumno), &(curso->curso));
+    inscripciones->agregarInscripcion(nuevaInscripcion);
+    
+    std::cout << "Alumno inscrito exitosamente." << std::endl;
+    std::cout << "Alumno inscrito exitosamente." << std::endl;
+    std::cout << "Cupos disponibles: " << (curso->curso.getCapacidad() - (cantidadInscripciones + 1)) << std::endl;
 }
 
 void Sistema::eliminarInscripcion(std::string id, std::string codigo){
@@ -145,11 +153,11 @@ void Sistema::mostrarNotasCurso(std::string id, std::string codigo){
     }
     std::cout << "Notas del alumno " << nodo -> inscripcion.getAlumno() -> getNombre() 
               << " en el curso " << nodo -> inscripcion.getCurso() -> getNombre() << ": ";
-    nodo -> inscripcion.notas -> mostrarNotas();
+    nodo -> inscripcion.mostrarNotas();
 }
 
 void Sistema::reporteAlumno(std::string id){
-    NodoAlumno* nodoAlumno = alumnos -> buscarAlumno(id);
+    NodoAlumno* nodoAlumno = alumnos -> buscarAlumnoId(id);
     if(nodoAlumno == nullptr){
         std::cout << "El alumno con ID " << id << " no está registrado." << std::endl;
         return;
@@ -218,7 +226,7 @@ void Sistema::alumnosPorCarrera(std::string carrera){
 }
 
 void Sistema::cursosPorAlumno(std::string id){
-    NodoAlumno* nodoAlumno = alumnos -> buscarAlumno(id);
+    NodoAlumno* nodoAlumno = alumnos -> buscarAlumnoId(id);
     if(nodoAlumno == nullptr){
         std::cout << "El alumno con ID " << id << " no está registrado." << std::endl;
         return;
@@ -252,7 +260,7 @@ void Sistema::promedioAlumnoCurso(std::string id, std::string codigo){
 }
 
 void Sistema::promedioAlumno(std::string id){
-    NodoAlumno* nodoAlumno = alumnos -> buscarAlumno(id);
+    NodoAlumno* nodoAlumno = alumnos -> buscarAlumnoId(id);
     if(nodoAlumno == nullptr){
         std::cout << "El alumno con ID " << id << " no está registrado." << std::endl;
         return;
@@ -275,7 +283,3 @@ void Sistema::promedioAlumno(std::string id){
     std::cout << "El promedio general del alumno " << nodoAlumno -> alumno.getNombre() 
               << " es: " << promedioGeneral << std::endl;
 }
-
-
-
-

@@ -50,7 +50,7 @@ int ListaNotas::getCantidad(){
 bool ListaNotas::notaValida(float calificacion){
     return (calificacion >= 1.0f && calificacion <= 7.0f);
 }
-ListaNotas::mostrarNotas(){
+void ListaNotas::mostrarNotas(){
     Nota* actual = cabeza;
     while(actual != nullptr){
         std::cout << actual -> calificacion << " ";

@@ -1,4 +1,5 @@
 #include "Curso.h"
+#include <string>
 
 #include <iostream>
 
@@ -30,4 +31,3 @@ void Curso::toString(){
     cout << "Profesor: " << profesor << endl;
 }
 
-~Curso(){};

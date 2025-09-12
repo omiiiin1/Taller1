@@ -16,5 +16,6 @@ class Inscripcion{
         Alumno* getAlumno();
         Curso* getCurso();
         int getCantidadNotas();
+        void mostrarNotas();
         
 };

@@ -18,11 +18,11 @@ class Alumno {
         std::string getApellido();
         std::string getCarrera();
         std::string getFechaIngreso();
-        void setId(string);
-        void setNombre(string);
-        void setApellido(string);
-        void setCarrera(string);
-        void setFechaIngreso(string);
+        void setId(std::string);
+        void setNombre(std::string);
+        void setApellido(std::string);
+        void setCarrera(std::string);
+        void setFechaIngreso(std::string);
         void toString();
         ~Alumno(){};
 

@@ -55,7 +55,7 @@ void ListaAlumnos::eliminarAlumno(Alumno* a){
     }
 }
 
-NodoAlumno* ListaAlumnos::buscarAlumno(std::string id){
+NodoAlumno* ListaAlumnos::buscarAlumnoId(std::string id){
     NodoAlumno* actual = cabeza;
     while(actual != nullptr){
         if(actual -> alumno.getId() == id){

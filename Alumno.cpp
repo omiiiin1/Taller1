@@ -1,4 +1,5 @@
 #include "Alumno.h"
+#include <string>
 #include <iostream>
 using namespace std;
 
@@ -27,5 +28,4 @@ void Alumno::toString(){
     cout << "Fecha de ingreso: " << fechaIngreso << endl;
 }
 
-~Alumno(){};
 

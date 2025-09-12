@@ -1,5 +1,5 @@
 #include <iostream>
-#include "ListaIncripciones.h"
+#include "ListaInscripciones.h"
 
 
 ListaInscripciones::ListaInscripciones(){
