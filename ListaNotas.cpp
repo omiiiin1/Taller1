@@ -29,6 +29,7 @@ void ListaNotas::agregarNota(float calificacion){
         cantidad++;
     } else {
         std::cout << "Nota fuera de rango. Debe estar entre 1.0 y 7.0" << std::endl;
+        return;
     }
 }
 

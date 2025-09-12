@@ -259,7 +259,6 @@ void mostrarMenuReportes() {
     cout << "4. Cursos por alumno" << endl;
     cout << "5. Promedio alumno en curso" << endl;
     cout << "6. Promedio general alumno" << endl;
-    cout << "7. Mostrar notas de curso" << endl;
     cout << "0. Volver al menu principal" << endl;
     cout << "----------------" << endl;
 }

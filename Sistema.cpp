@@ -33,13 +33,13 @@ void Sistema::eliminarAlumno(std::string id){
         return;
     }
     // Eliminar inscripciones asociadas al alumno
-    NodoInscripcion* actual = inscripciones -> getCabeza();
+    NodoInscripcion* actual = inscripciones->getCabeza();
     while(actual != nullptr){
-        if(actual -> inscripcion.getAlumno() -> getId() == id){
-            inscripciones -> eliminarInscripcion(actual -> inscripcion);
-            actual = inscripciones -> getCabeza(); // Reiniciar desde el inicio
+        if(actual->inscripcion.getAlumno().getId() == id){
+            inscripciones->eliminarInscripcion(actual->inscripcion.getAlumnoId(), actual->inscripcion.getCursoCodigo());
+            actual = inscripciones->getCabeza(); // Reiniciar desde el inicio
         } else {
-            actual = actual -> siguiente;
+            actual = actual->siguiente;
         }
     }
     
@@ -76,13 +76,13 @@ void Sistema::eliminarCurso(std::string codigo){
         return;
     }
     
-    NodoInscripcion* actual = inscripciones -> getCabeza();
+    NodoInscripcion* actual = inscripciones->getCabeza();
     while(actual != nullptr){
-        if(actual -> inscripcion.getCurso() -> getCodigo() == codigo){
-            inscripciones -> eliminarInscripcion(actual -> inscripcion);
-            actual = inscripciones -> getCabeza(); 
+        if(actual->inscripcion.getCurso().getCodigo() == codigo){
+            inscripciones->eliminarInscripcion(actual->inscripcion.getAlumnoId(), actual->inscripcion.getCursoCodigo());
+            actual = inscripciones->getCabeza(); 
         } else {
-            actual = actual -> siguiente;
+            actual = actual->siguiente;
         }
     }
     
@@ -117,21 +117,19 @@ void Sistema::inscribirAlumno(std::string idAlumno, std::string codigoCurso) {
     }
 
     
-    Inscripcion nuevaInscripcion(&(alumno->alumno), &(curso->curso));
+    Inscripcion nuevaInscripcion(alumno->alumno, curso->curso);
     inscripciones->agregarInscripcion(nuevaInscripcion);
-    
-    std::cout << "Alumno inscrito exitosamente." << std::endl;
     std::cout << "Alumno inscrito exitosamente." << std::endl;
     std::cout << "Cupos disponibles: " << (curso->curso.getCapacidad() - (cantidadInscripciones + 1)) << std::endl;
 }
 
 void Sistema::eliminarInscripcion(std::string id, std::string codigo){
-    NodoInscripcion* nodo = inscripciones -> buscarInscripcion(id, codigo);
+    NodoInscripcion* nodo = inscripciones->buscarInscripcion(id, codigo);
     if(nodo == nullptr){
         std::cout << "La inscripción no existe." << std::endl;
         return;
     }
-    inscripciones -> eliminarInscripcion(nodo -> inscripcion);
+    inscripciones->eliminarInscripcion(id, codigo);
     std::cout << "Inscripción eliminada exitosamente." << std::endl;
 }
 
@@ -151,9 +149,9 @@ void Sistema::mostrarNotasCurso(std::string id, std::string codigo){
         std::cout << "La inscripción no existe." << std::endl;
         return;
     }
-    std::cout << "Notas del alumno " << nodo -> inscripcion.getAlumno() -> getNombre() 
-              << " en el curso " << nodo -> inscripcion.getCurso() -> getNombre() << ": ";
-    nodo -> inscripcion.mostrarNotas();
+    std::cout << "Notas del alumno " << nodo->inscripcion.getAlumno().getNombre()
+              << " en el curso " << nodo->inscripcion.getCurso().getNombre() << ": ";
+    nodo->inscripcion.mostrarNotas();
 }
 
 void Sistema::reporteAlumno(std::string id){
@@ -165,17 +163,17 @@ void Sistema::reporteAlumno(std::string id){
     std::cout << "Reporte del alumno: " << std::endl;
     nodoAlumno -> alumno.toString();
     std::cout << "Inscripciones:" << std::endl;
-    NodoInscripcion* actual = inscripciones -> getCabeza();
+    NodoInscripcion* actual = inscripciones->getCabeza();
     bool tieneInscripciones = false;
     while(actual != nullptr){
-        if(actual -> inscripcion.getAlumno() -> getId() == id){
+        if(actual->inscripcion.getAlumno().getId() == id){
             tieneInscripciones = true;
-            std::cout << "Curso: " << actual -> inscripcion.getCurso() -> getNombre() 
-                      << " | Promedio: " << actual -> inscripcion.calcularPromedio() 
-                      << " | Cantidad de Notas: " << actual -> inscripcion.getCantidadNotas() 
+            std::cout << "Curso: " << actual->inscripcion.getCurso().getNombre()
+                      << " | Promedio: " << actual->inscripcion.calcularPromedio()
+                      << " | Cantidad de Notas: " << actual->inscripcion.getCantidadNotas()
                       << std::endl;
         }
-        actual = actual -> siguiente;
+        actual = actual->siguiente;
     }
     if(!tieneInscripciones){
         std::cout << "El alumno no tiene inscripciones." << std::endl;
@@ -191,17 +189,17 @@ void Sistema::reporteCurso(std::string codigo){
     std::cout << "Reporte del curso: " << std::endl;
     nodoCurso -> curso.toString();
     std::cout << "Inscripciones:" << std::endl;
-    NodoInscripcion* actual = inscripciones -> getCabeza();
+    NodoInscripcion* actual = inscripciones->getCabeza();
     bool tieneInscripciones = false;
     while(actual != nullptr){
-        if(actual -> inscripcion.getCurso() -> getCodigo() == codigo){
+        if(actual->inscripcion.getCurso().getCodigo() == codigo){
             tieneInscripciones = true;
-            std::cout << "Alumno: " << actual -> inscripcion.getAlumno() -> getNombre() 
-                      << " | Promedio: " << actual -> inscripcion.calcularPromedio() 
-                      << " | Cantidad de Notas: " << actual -> inscripcion.getCantidadNotas() 
+            std::cout << "Alumno: " << actual->inscripcion.getAlumno().getNombre()
+                      << " | Promedio: " << actual->inscripcion.calcularPromedio()
+                      << " | Cantidad de Notas: " << actual->inscripcion.getCantidadNotas()
                       << std::endl;
         }
-        actual = actual -> siguiente;
+        actual = actual->siguiente;
     }
     if(!tieneInscripciones){
         std::cout << "El curso no tiene inscripciones." << std::endl;
@@ -210,15 +208,15 @@ void Sistema::reporteCurso(std::string codigo){
 
 void Sistema::alumnosPorCarrera(std::string carrera){
     std::cout << "Alumnos de la carrera " << carrera << ":" << std::endl;
-    NodoAlumno* actual = alumnos -> getCabeza();
+    NodoAlumno* actual = alumnos->getCabeza();
     bool tieneAlumnos = false;
     while(actual != nullptr){
-        if(actual -> alumno.getCarrera() == carrera){
+        if(actual->alumno.getCarrera() == carrera){
             tieneAlumnos = true;
-            actual -> alumno.toString();
+            actual->alumno.toString();
             std::cout << "------------------------" << std::endl;
         }
-        actual = actual -> siguiente;
+        actual = actual->siguiente;
     }
     if(!tieneAlumnos){
         std::cout << "No hay alumnos registrados en esta carrera." << std::endl;
@@ -232,15 +230,15 @@ void Sistema::cursosPorAlumno(std::string id){
         return;
     }
     std::cout << "Cursos del alumno " << nodoAlumno -> alumno.getNombre() << ":" << std::endl;
-    NodoInscripcion* actual = inscripciones -> getCabeza();
+    NodoInscripcion* actual = inscripciones->getCabeza();
     bool tieneCursos = false;
     while(actual != nullptr){
-        if(actual -> inscripcion.getAlumno() -> getId() == id){
+        if(actual->inscripcion.getAlumno().getId() == id){
             tieneCursos = true;
-            actual -> inscripcion.getCurso() -> toString();
+            actual->inscripcion.getCurso().toString();
             std::cout << "------------------------" << std::endl;
         }
-        actual = actual -> siguiente;
+        actual = actual->siguiente;
     }
     if(!tieneCursos){
         std::cout << "El alumno no está inscrito en ningún curso." << std::endl;
@@ -253,9 +251,9 @@ void Sistema::promedioAlumnoCurso(std::string id, std::string codigo){
         std::cout << "La inscripción no existe." << std::endl;
         return;
     }
-    float promedio = nodo -> inscripcion.calcularPromedio();
-    std::cout << "El promedio del alumno " << nodo -> inscripcion.getAlumno() -> getNombre() 
-              << " en el curso " << nodo -> inscripcion.getCurso() -> getNombre() 
+    float promedio = nodo->inscripcion.calcularPromedio();
+    std::cout << "El promedio del alumno " << nodo->inscripcion.getAlumno().getNombre()
+              << " en el curso " << nodo->inscripcion.getCurso().getNombre()
               << " es: " << promedio << std::endl;
 }
 
@@ -265,15 +263,15 @@ void Sistema::promedioAlumno(std::string id){
         std::cout << "El alumno con ID " << id << " no está registrado." << std::endl;
         return;
     }
-    NodoInscripcion* actual = inscripciones -> getCabeza();
+    NodoInscripcion* actual = inscripciones->getCabeza();
     float sumaPromedios = 0.0f;
     int cantidadCursos = 0;
     while(actual != nullptr){
-        if(actual -> inscripcion.getAlumno() -> getId() == id){
-            sumaPromedios += actual -> inscripcion.calcularPromedio();
+        if(actual->inscripcion.getAlumno().getId() == id){
+            sumaPromedios += actual->inscripcion.calcularPromedio();
             cantidadCursos++;
         }
-        actual = actual -> siguiente;
+        actual = actual->siguiente;
     }
     if(cantidadCursos == 0){
         std::cout << "El alumno no está inscrito en ningún curso." << std::endl;

@@ -1,3 +1,4 @@
+#pragma once
 #include "NodoInscripcion.h"
 
 class ListaInscripciones{
@@ -8,9 +9,9 @@ class ListaInscripciones{
     public:
         ListaInscripciones();
         ~ListaInscripciones();
-        void agregarInscripcion(Inscripcion);
-        void eliminarInscripcion(Inscripcion);
-        NodoInscripcion* buscarInscripcion(std::string, std::string);
+        void agregarInscripcion(Inscripcion inscripcion);
+        void eliminarInscripcion(std::string idAlumno, std::string codigoCurso);
+        NodoInscripcion* buscarInscripcion(std::string idAlumno, std::string codigoCurso);
         int getCantidad();
         void mostrarInscripciones();
 
