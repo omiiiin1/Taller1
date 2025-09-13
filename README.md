@@ -2,4 +2,4 @@ Taller 1 - Estructura de Datos
 =============================
 AUTOR
 ------------
-Gaspar Navarro - 20.709.481-1 - Ingeniería en Tecnologías de Información
+Gaspar Navarro - Ingeniería en Tecnologías de Información - Paralelo C2
